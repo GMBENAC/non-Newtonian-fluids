@@ -1,0 +1,36 @@
+# Modelo Reológico dependente do ph
+
+import numpy as np
+import matplotlib.pyplot as plt
+import math as m
+
+# Variáveis
+
+u_m :float = 23.83 # É o incremento máximo na viscosidade em relação a base.  
+u_0: float = 1000 # É a viscosidade na base (ph = 0 0u ph = 7).
+ph_m: float = 5.47 # é o valor do pH da viscosidade máxima.
+a : float = 23.5  # coeficiente que é inversamente proporcional ao range de ph onde ocorre o pico de viscosidade.
+ph: float = np.linspace(1,7,100) # Potencial Hidrogeniônico.
+
+T = 300 # Temperatura em Kelvin
+T_0 = 150 # Temperatura inicial em Kelvin
+Y_yx1 = 10 # Taxa de Cisalhamento (Pa)
+Y_yx2 = 20
+Y_yx3 = 40
+n: int = 1.2 # coeficiente índice de comportamento dp fluxo
+alpha = 0.9 # coeficiente de temperatura
+N_ph1: float = ((u_0*((Y_yx1)**(n-1)))*((1-alpha)*((T-T_0)/T_0))*(1+(u_m-1)*np.exp((-a*(ph-ph_m)**2)/(ph*(7-ph))))) 
+N_ph2: float = ((u_0*((Y_yx2)**(n-1)))*((1-alpha)*((T-T_0)/T_0))*(1+(u_m-1)*np.exp((-a*(ph-ph_m)**2)/(ph*(7-ph))))) 
+N_ph3: float = ((u_0*((Y_yx3)**(n-1)))*((1-alpha)*((T-T_0)/T_0))*(1+(u_m-1)*np.exp((-a*(ph-ph_m)**2)/(ph*(7-ph))))) 
+
+plt.plot(ph,N_ph1, label='$\dot{\gamma}=10$s^{-1}$')
+plt.plot(ph,N_ph2, label='$\dot{\gamma}=20$s^{-1}$')
+plt.plot(ph,N_ph3, label='$\dot{\gamma}=40$s^{-1}$')
+
+plt.title("Viscosidade x ph (Taxa de Cisalhamento Constante)")
+plt.xlabel("Taxa de cisalhamento, (1/s)")
+plt.ylabel(" Viscosidade, (Pa.s)")
+plt.xlim(0,8)
+plt.ylim(0,6000)
+plt.legend(loc="best")
+plt.show()
